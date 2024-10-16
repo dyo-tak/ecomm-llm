@@ -5,7 +5,10 @@ from mongo import get_product_by_id
 from utils import langchain_chat
 # from langchain import ChatOpenAI
 # from mistral import MistralClient  # hypothetical client; adapt as per your API
+import getpass
+import os
 
+print(os.environ["MISTRAL_API_KEY"])
 app = FastAPI()
 
 @app.get("/")
@@ -48,10 +51,10 @@ async def websocket_endpoint(websocket: WebSocket):
             question = question_data.get("message")
             print(question)
 
-                # Use LangChain to generate a response using the product description
+            # Use LangChain to generate a response using the product description
             llm_response = langchain_chat(product_title, product_description, question)
             print(llm_response)
-                # Prepare response
+            # Prepare response
             response = {
                     "original_question": question,
                     "product_id": product_id,
