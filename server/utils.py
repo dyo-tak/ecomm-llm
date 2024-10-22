@@ -2,9 +2,25 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.output_parsers import StrOutputParser
+import requests
+url = 'https://6df3-35-197-137-37.ngrok-free.app/testing'
 
-def ai_review(product):
-    return
+def ai_review(product_title ,product_description):
+    myInput = {
+        "product_title": product_title,
+        "product_description": product_description,
+        "target attributes": "RAM"
+    }
+    # Define the JSON payload
+    data = {
+        "Task": "Attribute_Value_Extraction",
+        "Input": myInput
+    }
+
+    response = requests.get(url, json=data)
+    print(response.status_code)
+    print(response.json())  # Assuming the response is in JSON format
+    return response.json()["response"]
 
 
 # Function to handle LangChain chat with product description

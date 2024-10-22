@@ -2,19 +2,40 @@ from fastapi import FastAPI, WebSocket, Body
 import json
 import uvicorn
 from mongo import get_product_by_id
-from utils import langchain_chat
+from utils import langchain_chat, ai_review
+from fastapi.middleware.cors import CORSMiddleware
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust this to your frontend's URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # from langchain import ChatOpenAI
 # from mistral import MistralClient  # hypothetical client; adapt as per your API
 
-app = FastAPI()
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
+
 @app.post("/tasks")
 def perform_task(request: dict = Body(...)):
-    return {"message": "done123", "response": request}
+    # product_info = json.loads(request)
+
+    product_id = request.get("id")
+    print(product_id)
+    product = get_product_by_id(product_id)
+    product_description = product.get('description')
+    product_title = product.get('title')
+
+    # llm_response = ai_review(product_title, product_description)
+    llm_response = ai_review(product_title, product_description)
+    return {"message": "11909", "llm_response": llm_response}
 
 
 @app.websocket("/ws")

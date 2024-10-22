@@ -8,17 +8,44 @@ import { Product } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type Props = {
   params: { id: string };
 };
 
 const ProductDetails = async ({ params: { id } }: Props) => {
+  // const [res, setRes] = useState
   const product: Product = await getProductById(id);
-
+  let ress: any;
   if (!product) redirect("/");
 
   const similarProducts = await getSimilarProducts(id);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/tasks", {
+        method: "POST", // or 'GET' depending on your use case
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: id }),
+        cache: "no-store", // Payload sent in the request
+      });
+
+      if (response.ok) {
+        const data = await response.json(); // Parsing the response
+        console.log(data);
+        ress = data;
+      } else {
+        console.error("Request failed", response.status);
+      }
+    } catch (error) {
+      console.error("Error occurred while fetching data:", error);
+    }
+  };
+  // const data = await fetchData();
+  await fetchData();
 
   return (
     <div className="product-container">
@@ -208,7 +235,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
           </h3>
 
           <div className="flex flex-col gap-4">
-            {/* {product?.description?.split("\n")} */}
+            {ress?.llm_response?.split("\n")}
           </div>
         </div>
       </div>

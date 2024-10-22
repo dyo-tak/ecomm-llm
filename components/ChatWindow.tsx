@@ -12,7 +12,6 @@ const ChatWindow = ({ id }: ChatWindowProps) => {
   );
   const [inputValue, setInputValue] = useState("");
   const [socket, setSocket] = useState<WebSocket | null>(null); // Store the WebSocket connection
-  let firstTime = true;
 
   // Initialize WebSocket connection when the component mounts
   useEffect(() => {
@@ -77,6 +76,11 @@ const ChatWindow = ({ id }: ChatWindowProps) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Type a message..."
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSendMessage(); // Trigger send on Enter
+            }
+          }}
         />
         <button onClick={handleSendMessage}>Send</button>
       </div>
