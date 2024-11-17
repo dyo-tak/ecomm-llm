@@ -17,6 +17,20 @@ client = MongoClient(MONGODB_URI)
 db = client["test"]  # Replace with your database name
 products_collection = db["product2"]  # Replace with your collection name
 
+
+def get_product_titles():
+    try:
+        # Query to get all product titles
+        product_titles = products_collection.find({}, {"_id": 0, "title": 1})  # Exclude _id, include title
+
+        # Extract titles into a list
+        titles_list = [product["title"] for product in product_titles]
+
+        return titles_list
+    except Exception as e:
+        print(f"Error fetching product titles: {e}")
+        return []
+
 # Function to get product by ID
 def get_product_by_id(product_id):
     try:
@@ -29,11 +43,17 @@ def get_product_by_id(product_id):
     except Exception as e:
         print(f"Error fetching product: {e}")
         return None
+    
 
-# Example usage
-# product_id = "670d1cae9884470f8e978c87"  # Replace with an actual ObjectId
-# product = get_product_by_id(product_id)
-# if product:
-#     print(f"Product Description: {product.get('description')}")
-# else:
-#     print("Product not found")
+def delete_all_items():
+    try:
+        # Delete all documents in the collection
+        result = products_collection.delete_many({})
+        
+        print(f"Deleted {result.deleted_count} documents from the collection.")
+        return result.deleted_count  # Return the count of deleted documents
+
+    except Exception as e:
+        print(f"Error deleting documents: {e}")
+        return None
+    

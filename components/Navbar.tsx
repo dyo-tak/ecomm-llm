@@ -1,17 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Lilita_One } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const lilitaOne = Lilita_One({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
-
 const navIcons = [
   { src: "/assets/icons/search.svg", alt: "search" },
-  { src: "/assets/icons/black-heart.svg", alt: "heart" },
-  { src: "/assets/icons/user.svg", alt: "user" },
+  // { src: "/assets/icons/black-heart.svg", alt: "heart" },
+  // { src: "/assets/icons/user.svg", alt: "user" },
 ];
 
 const Navbar = () => {
@@ -26,14 +25,14 @@ const Navbar = () => {
             alt="logo"
           />
 
-          <div className={lilitaOne.className}>
+          <div className={inter.className}>
             <p className="nav-logo {style}">
-              Ecomm<span className="text-blue-600">LLM </span>
+              Ecomm<span className="text-blue-600">SLM </span>
             </p>
           </div>
         </Link>
 
-        {/* <div className="flex items-center gap-5">
+        <Link href="/search" className="flex items-center gap-5">
           {navIcons.map((icon) => (
             <Image
               key={icon.alt}
@@ -44,7 +43,7 @@ const Navbar = () => {
               className="object-contain"
             />
           ))}
-        </div> */}
+        </Link>
       </nav>
     </header>
   );

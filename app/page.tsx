@@ -23,11 +23,11 @@ const page = async () => {
             </p>
             <h1 className="head-text ">
               Unleash the Power of
-              <span className="text-blue-700"> Ecomm LLM</span>
+              <span className="text-blue-700"> Ecomm SLM</span>
             </h1>
             <p className="mt-6">
               Paste your amazon product link below and we will provide you with
-              ecomm llm.
+              ecomm SLM.
             </p>
             <Searchbar />
           </div>

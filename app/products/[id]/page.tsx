@@ -223,7 +223,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
           </h3>
 
           <div className="flex flex-col gap-4">
-            {/* {product?.description?.split("\n")} */}
+            {ress?.ai_summary?.split("\n")}
           </div>
         </div>
       </div>
@@ -235,19 +235,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
           </h3>
 
           <div className="flex flex-col gap-4">
-            {ress?.llm_response?.split("\n")}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-16">
-        <div className="flex flex-col gap-5">
-          <h3 className="text-2xl text-secondary font-semibold">
-            Sequential Recommendation
-          </h3>
-
-          <div className="flex flex-col gap-4">
-            {/* {product?.description?.split("\n")} */}
+            {ress?.product_attribute?.split("\n")}
           </div>
         </div>
       </div>
@@ -259,7 +247,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
           </h3>
 
           <div className="flex flex-col gap-4">
-            {/* {product?.description?.split("\n")} */}
+            {ress?.matching_products?.split("\n")}
           </div>
         </div>
       </div>

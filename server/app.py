@@ -2,7 +2,7 @@ from fastapi import FastAPI, WebSocket, Body
 import json
 import uvicorn
 from mongo import get_product_by_id
-from utils import langchain_chat, ai_review
+from utils import langchain_chat, ai_tasks
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -13,9 +13,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# from langchain import ChatOpenAI
-# from mistral import MistralClient  # hypothetical client; adapt as per your API
 
 
 @app.get("/")
@@ -28,14 +25,10 @@ def perform_task(request: dict = Body(...)):
     # product_info = json.loads(request)
 
     product_id = request.get("id")
-    print(product_id)
-    product = get_product_by_id(product_id)
-    product_description = product.get('description')
-    product_title = product.get('title')
 
     # llm_response = ai_review(product_title, product_description)
-    llm_response = ai_review(product_title, product_description)
-    return {"message": "11909", "llm_response": llm_response}
+    llm_response = ai_tasks(product_id)
+    return llm_response
 
 
 @app.websocket("/ws")
@@ -82,8 +75,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 # Send the response back to the client
             await websocket.send_text(json.dumps(response))
 
-    except WebSocketDisconnect:
-        print("Client disconnected")
+    except Exception as e:
+        print("Client disconnected" , e)
     
     finally:
         await websocket.close()

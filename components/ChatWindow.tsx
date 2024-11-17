@@ -51,14 +51,6 @@ const ChatWindow = ({ id }: ChatWindowProps) => {
     ]);
     setInputValue(""); // Clear the input field
     // };
-
-    // // Mock response from the server (replace this with actual response handling)
-    // setTimeout(() => {
-    //   setMessages((prevMessages) => [
-    //     ...prevMessages,
-    //     { user: "Bot", text: "This is a response to: " + inputValue },
-    //   ]);
-    // }, 1000);
   };
 
   return (

@@ -6,6 +6,7 @@ import { Inter, Poppins } from "next/font/google";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
 const poppins = Poppins({
@@ -15,9 +16,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Ecomm LLM",
+  title: "Ecomm SLM",
   description:
-    "Ecommerce specific llms to leverage llm advantage in Ecommerce.",
+    "Ecommerce specific SLMs to leverage SLM advantage in Ecommerce.",
 };
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>
+      <body className={inter.className}>
         <main className="max-w-10xl mx-auto">
           <Navbar />
           {children}
