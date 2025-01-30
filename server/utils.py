@@ -155,4 +155,4 @@ def langchain_chat(product_title ,product_description, question):
         return None
 
     
-# pp.pprint(ai_tasks("6717f4f49884470f8e9a6253"))
+pp.pprint(ai_tasks("6717f4f49884470f8e9a6253"))
