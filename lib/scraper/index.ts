@@ -83,3 +83,51 @@ export async function scrapeAmazonProduct(url: string) {
     console.log(error);
   }
 }
+
+
+export async function scrapeAmazonProductList(url: string) {
+  if (!url) return;
+
+  // BrightData proxy configuration
+  const username = String(process.env.BRIGHT_DATA_USERNAME);
+  const password = String(process.env.BRIGHT_DATA_PASSWORD);
+  const port = 22225;
+  const session_id = (1000000 * Math.random()) | 0;
+
+  const options = {
+    auth: {
+      username: `${username}-session-${session_id}`,
+      password,
+    },
+    host: "brd.superproxy.io",
+    port,
+    rejectUnauthorized: false,
+  };
+
+  try {
+    const response = await axios.get(url, options);
+    const $ = cheerio.load(response.data);
+
+    // const title = $("#productTitle").text().trim();
+    // const urlList = extractPrice(
+    //   $(".priceToPay span.a-price-whole"),
+    //   $(".a.size.base.a-color-price"),
+    //   $(".a-button-selected .a-color-base")
+    // );
+
+    const urlList = $(".a-link-normal.s-line-clamp-2.s-link-style.a-text-normal")
+      .map((_, element) => {
+        return $(element).attr("href");
+      })
+      .get();
+
+    console.log(urlList);
+
+    // console.log(urlList);
+    return urlList;
+  } catch (error: any) {
+    console.log(error);
+  }
+}
+
+

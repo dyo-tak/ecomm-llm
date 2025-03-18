@@ -1,8 +1,9 @@
 # utils.py
-from mongo import get_product_by_id, get_product_titles
+from mongo import get_product_by_id, get_product_titles, products_collection
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.output_parsers import StrOutputParser
+from bson.objectid import ObjectId
 import pprint 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -39,7 +40,7 @@ def get_matching_product(product_title, product_description):
         Given the title, description of a product, identify the similar products from `List of Products` which contains a list product titles. 
         Only return a list of products that best match or are similar to the original product. Do not write code.
         Do not provide any elaboration or explanation.
-        If no product is found, respond with "No matching product found."
+        If no product is found, only respond "No matching product found."
         """
 
         # Prepare the input prompt
@@ -75,7 +76,7 @@ def get_product_attribute_extraction(product_title, product_description, target_
         # Instruction for attribute extraction
         instruction = """
         Given the title, description, feature, price, and brand of a product and a set of target attributes, extract the value of each target attribute from the product information. 
-        Output the extracted value and the corresponding source (e.g., title or feature) denoting where the value is extracted. Give your response in the format ```Target Attribute: Attribute Value```
+        Output the extracted value and the corresponding source (e.g., title or feature) denoting where the value is extracted. Give your response in the format and nothing else ```Target Attribute: Attribute Value```
         """
 
         # Input data to be fed to the model
@@ -110,14 +111,30 @@ def ai_tasks(product_id):
     product_description = product.get('description')
     product_title = product.get('title')
 
+    if all(key in product for key in ["ai_summary", "product_attribute"]):
+        return {
+            "ai_summary": product["ai_summary"],
+            "product_attribute": product["product_attribute"],
+            # "matching_products": product["matching_products"]
+        }
+
     ai_summary = get_ai_summary(product_title, product_description)
     product_attribute = get_product_attribute_extraction(product_title, product_description)
-    matching_products = get_matching_product(product_title, product_description)
+    # matching_products = get_matching_product(product_title, product_description)
 
+    products_collection.update_one(
+        {"_id": ObjectId(product_id)},
+        {"$set": {
+            "ai_summary": ai_summary,
+            "product_attribute": product_attribute,
+            # "matching_products": matching_products
+        }}
+    )
+    
     task_results = {
         "ai_summary": ai_summary,
         "product_attribute": product_attribute,
-        "matching_products": matching_products
+        # "matching_products": matching_products
     }
 
     return task_results
@@ -155,4 +172,4 @@ def langchain_chat(product_title ,product_description, question):
         return None
 
     
-pp.pprint(ai_tasks("6717f4f49884470f8e9a6253"))
+# pp.pprint(ai_tasks("6717f4209884470f8e992aee"))

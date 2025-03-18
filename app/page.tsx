@@ -2,10 +2,12 @@ import Image from "next/image";
 import Searchbar from "@/components/Searchbar";
 import HerpCarousal from "@/components/HerpCarousal";
 import { getAllProducts } from "@/lib/actions";
+import { scrapeAmazonProductList } from "@/lib/scraper/productListScrapper";
 import ProductCard from "@/components/ProductCard";
 
 const page = async () => {
   const allProducts = await getAllProducts();
+  // const temp = scrapeAmazonProductList();
 
   return (
     <>
